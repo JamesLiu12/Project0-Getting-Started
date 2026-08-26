@@ -3,7 +3,7 @@
 This project consists of two parts:
 
 1. CUDA GL Check
-    * This is due **August 29 2025**. (See [late policy](#late-policy) at the bottom)
+    * This is due **August 28 2026**. (See [late policy](#late-policy) at the bottom)
     * Instructions for this project are below.
 2. CUDA Introduction
     * This is an exercise for you to grasp core CUDA concepts that are taught in the first 2 lectures.
@@ -28,7 +28,7 @@ This project contains:
 
 CIS 5650 projects require a compatible NVIDIA GPU. As some of you may not have an NVIDIA GPU in your personal computers, we have made them available through the CETS Virtual Lab.
 
-Follow the [Hardware and Software Setup](https://cis5650-fall-2025.github.io/setup/) pages on the course website to set up your development environment.
+Follow the [Hardware and Software Setup](https://cis5650-fall-2026.github.io/setup/) pages on the course website to set up your development environment.
 
 *Notes:*
 
@@ -54,7 +54,7 @@ Follow the [Hardware and Software Setup](https://cis5650-fall-2025.github.io/set
      clone your fork.
         * `git clone` the clone URL from your GitHub fork homepage.
 
-Note: Do not clone projects directly from the [CIS5650-Fall-2025](https://github.com/CIS5650-Fall-2025) GitHub organization. Be sure to fork the project on GitHub first to your own account and then clone it using your fork.
+Note: Do not clone projects directly from the [CIS5650-Fall-2026](https://github.com/CIS5650-Fall-2026) GitHub organization. Be sure to fork the project on GitHub first to your own account and then clone it using your fork.
 
 *Getting Started with GitHub Resources:*
 
