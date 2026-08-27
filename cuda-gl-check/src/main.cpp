@@ -133,9 +133,6 @@ void initCUDA() {
     // Default to device ID 0. If you have more than one GPU and want to test a non-default one,
     // change the device ID.
     cudaGLSetGLDevice(0);
-
-    // Clean up on program exit
-    atexit(cleanupCUDA);
 }
 
 void initTextures() {
@@ -190,6 +187,7 @@ void mainLoop() {
         glDrawElements(GL_TRIANGLES, 6,  GL_UNSIGNED_SHORT, 0);
         glfwSwapBuffers(m_window);
     }
+    cleanupCUDA();
     glfwDestroyWindow(m_window);
     glfwTerminate();
 }
