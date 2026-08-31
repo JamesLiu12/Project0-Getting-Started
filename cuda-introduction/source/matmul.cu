@@ -6,22 +6,22 @@
 #include <iostream>
 #include <random>
 
-// TODO 10: Implement the matrix multiplication kernel
+// 10: Implement the matrix multiplication kernel
 __global__ void matrixMultiplicationNaive(float* const matrixP, const float* const matrixM, const float* const matrixN,
                                           const unsigned sizeMX, const unsigned sizeNY, const unsigned sizeXY)
 {
-    // TODO 10a: Compute the P matrix global index for each thread along x and y dimentions.
+    // 10a: Compute the P matrix global index for each thread along x and y dimentions.
     // Remember that each thread of the kernel computes the result of 1 unique element of P
     unsigned px = blockIdx.x * blockDim.x + threadIdx.x;
     unsigned py = blockIdx.y * blockDim.y + threadIdx.y;
 
-    // TODO 10b: Check if px or py are out of bounds. If they are, return.
+    // 10b: Check if px or py are out of bounds. If they are, return.
     if (px >= sizeMX || py >= sizeNY)
     {
         return;
     }
 
-    // TODO 10c: Compute the dot product for the P element in each thread
+    // 10c: Compute the dot product for the P element in each thread
     // This loop will be the same as the host loop
     float dot = 0;
     for (unsigned k = 0; k < sizeXY; k++)
@@ -29,13 +29,13 @@ __global__ void matrixMultiplicationNaive(float* const matrixP, const float* con
         dot += matrixM[k * sizeMX + px] * matrixN[py * sizeXY + k];
     }
 
-    // TODO 10d: Copy dot to P matrix
+    // 10d: Copy dot to P matrix
     matrixP[py * sizeMX + px] = dot;
 }
 
 int main(int argc, char *argv[])
 {
-    // TODO 1: Initialize sizes. Start with simple like 16x16, then try 32x32.
+    // 1: Initialize sizes. Start with simple like 16x16, then try 32x32.
     // Then try large multiple-block square matrix like 64x64 up to 2048x2048.
     // Then try square, non-power-of-two like 15x15, 33x33, 67x67, 123x123, and 771x771
     // Then try rectangles with powers of two and then non-power-of-two.
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     const unsigned sizeXY = 32;
     const unsigned sizeNY = 64;
 
-    // TODO 2: Allocate host 1D arrays for:
+    // 2: Allocate host 1D arrays for:
     // matrixM[sizeMX, sizeXY]
     // matrixN[sizeXY, sizeNY]
     // matrixP[sizeMX, sizeNY]
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     for (unsigned i = 0; i < sizeXY * sizeNY; i++)
         matrixN[i] = dist(mt);
 
-    // TODO 3: Compute "gold" reference standard
+    // 3: Compute "gold" reference standard
     // for py -> 0 to sizeNY
     //   for px -> 0 to sizeMX
     //     initialize dot product accumulator
@@ -89,12 +89,12 @@ int main(int argc, char *argv[])
     // Device arrays
     float *d_matrixM, *d_matrixN, *d_matrixP;
 
-    // TODO 4: Allocate memory on the device for d_matrixM, d_matrixN, d_matrixP.
+    // 4: Allocate memory on the device for d_matrixM, d_matrixN, d_matrixP.
     CUDA(cudaMalloc((void**)&d_matrixM, sizeMX * sizeXY * sizeof(float)));
     CUDA(cudaMalloc((void**)&d_matrixN, sizeXY * sizeNY * sizeof(float)));
     CUDA(cudaMalloc((void**)&d_matrixP, sizeMX * sizeNY * sizeof(float)));
 
-    // TODO 5: Copy array contents of M and N from the host (CPU) to the device (GPU)
+    // 5: Copy array contents of M and N from the host (CPU) to the device (GPU)
     CUDA(cudaMemcpy((void*)d_matrixM, (void*)matrixM, sizeMX * sizeXY * sizeof(float), cudaMemcpyHostToDevice));
     CUDA(cudaMemcpy((void*)d_matrixN, (void*)matrixN, sizeXY * sizeNY * sizeof(float), cudaMemcpyHostToDevice));
 
@@ -107,17 +107,17 @@ int main(int argc, char *argv[])
     // LOOK: Use the clearHostAndDeviceArray function to clear matrixP and d_matrixP
     clearHostAndDeviceArray(matrixP, d_matrixP, sizeMX * sizeNY);
 
-    // TODO 6: Assign a 2D distribution of BS_X x BS_Y x 1 CUDA threads within
+    // 6: Assign a 2D distribution of BS_X x BS_Y x 1 CUDA threads within
     // Calculate number of blocks along X and Y in a 2D CUDA "grid" using divup
     // HINT: The shape of matrices has no impact on launch configuaration
     DIMS dims;
     dims.dimBlock = dim3(16, 16);
     dims.dimGrid  = dim3(divup(sizeMX, dims.dimBlock.x), divup(sizeNY, dims.dimBlock.y));
 
-    // TODO 7: Launch the matrix transpose kernel
+    // 7: Launch the matrix transpose kernel
     matrixMultiplicationNaive<<<dims.dimBlock, dims.dimGrid>>>(d_matrixP, d_matrixM, d_matrixN, sizeMX, sizeNY, sizeXY);
 
-    // TODO 8: copy the answer back to the host (CPU) from the device (GPU)
+    // 8: copy the answer back to the host (CPU) from the device (GPU)
     CUDA(cudaMemcpy((void*)matrixP, (void*)d_matrixP, sizeMX * sizeNY * sizeof(float), cudaMemcpyDeviceToHost));
 
     // LOOK: Use compareReferenceAndResult to check the result
@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
     std::cout << "****************************************************" << std::endl << std::endl;
     ////////////////////////////////////////////////////////////
 
-    // TODO 9: free device memory using cudaFree
+    // 9: free device memory using cudaFree
     CUDA(cudaFree(d_matrixM));
     CUDA(cudaFree(d_matrixN));
     CUDA(cudaFree(d_matrixP));
