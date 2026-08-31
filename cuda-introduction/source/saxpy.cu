@@ -59,8 +59,8 @@ int main(int argc, char *argv[])
     CUDA(cudaMalloc((void**)&d_z, size_in_byte));
 
     // 3: Copy array contents of X and Y from the host (CPU) to the device (GPU). Follow what you did for 2,
-    CUDA(cudaMemcpy((void*)d_x, x, size_in_byte, cudaMemcpyHostToDevice));
-    CUDA(cudaMemcpy((void*)d_y, y, size_in_byte, cudaMemcpyHostToDevice));
+    CUDA(cudaMemcpy((void*)d_x, (void*)x, size_in_byte, cudaMemcpyHostToDevice));
+    CUDA(cudaMemcpy((void*)d_y, (void*)y, size_in_byte, cudaMemcpyHostToDevice));
 
     CUDA(cudaDeviceSynchronize());
 
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 
     // 7: Copy the answer back to the host (CPU) from the device (GPU).
     // Copy what you did in 3, except for d_z -> z.
-    CUDA(cudaMemcpy(z, d_z, size_in_byte, cudaMemcpyDeviceToHost));
+    CUDA(cudaMemcpy((void*)z, (void*)d_z, size_in_byte, cudaMemcpyDeviceToHost));
 
     // LOOK: Use postprocess to check the result
     compareReferenceAndResult(z_gold, z, size, 1e-6);
